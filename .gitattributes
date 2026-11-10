@@ -1,0 +1,5 @@
+# Always keep Linux line endings (LF), even when a teammate checks out on Windows.
+# Files are copied into Linux containers; Windows CRLF endings can break scripts there.
+* text=auto eol=lf
+*.png binary
+*.jpg binary

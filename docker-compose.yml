@@ -1,0 +1,74 @@
+name: smart-parking
+
+services:
+  # ---------- Database ----------
+  redis:
+    image: redis:7.4-alpine
+    # --appendonly yes : every write is appended to a file (AOF) in /data
+    # --save 60 1      : also take an RDB snapshot every 60s if at least 1 key changed
+    # Both live in /data, which is a named volume -> data survives "docker compose down"
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--save", "60", "1"]
+    volumes:
+      - redis-data:/data
+    # No "ports:" on purpose - Redis is reachable only from inside the Docker network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ---------- Backend API ----------
+  api:
+    build: ./api
+    environment:
+      REDIS_HOST: redis          # the service name above = its hostname in the network
+      REDIS_PORT: 6379
+      MAX_CAPACITY: 15
+      # Demo mode: 1 billing unit = 60 seconds instead of 3600, so prices change live
+      BILLING_UNIT_SECONDS: 60
+      PRICE_FIRST_UNIT: 15
+      PRICE_NEXT_UNIT: 10
+    ports:
+      - "5000:5000"              # exposed so we can show curl/Postman POSTs in the demo
+    depends_on:
+      redis:
+        condition: service_healthy   # wait until Redis answers PING
+    healthcheck:
+      # python:slim has no curl, so we check with Python itself
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  # ---------- Dashboard ----------
+  web:
+    build: ./web
+    ports:
+      - "8080:80"                # open http://localhost:8080
+    depends_on:
+      api:
+        condition: service_healthy   # nginx needs the "api" host to exist when it starts
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  # ---------- IoT camera simulator ----------
+  camera:
+    build: ./camera
+    environment:
+      API_URL: http://api:5000/api/cars
+      CAMERA_INTERVAL_MIN: 8
+      CAMERA_INTERVAL_MAX: 20
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  redis-data:      # named volume managed by Docker (docker volume ls)

@@ -1,0 +1,193 @@
+:root {
+  --bg: #f3f5f9;
+  --card: #ffffff;
+  --text: #1c2333;
+  --muted: #667085;
+  --border: #e3e7ef;
+  --accent: #2f6fed;
+  --danger: #d92d20;
+  --ok: #12b76a;
+  --plate: #ffd200;
+  --plate-strip: #1d4ed8;
+}
+
+[data-theme="dark"] {
+  --bg: #0e1220;
+  --card: #171c2e;
+  --text: #e6e9f2;
+  --muted: #98a2b3;
+  --border: #283049;
+  --accent: #5b8cff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background .3s, color .3s;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand { display: flex; gap: 12px; align-items: center; }
+.logo { font-size: 36px; }
+h1 { margin: 0; font-size: 22px; }
+.sub { margin: 0; color: var(--muted); font-size: 14px; }
+.header-actions { display: flex; gap: 14px; align-items: center; }
+#clock { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); }
+.dot.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.dot.err { background: var(--danger); }
+
+main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat .label { color: var(--muted); font-size: 14px; }
+.stat .value { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.capacity { display: flex; align-items: center; gap: 12px; margin: 18px 0 4px; }
+.capacity-bar { flex: 1; height: 14px; background: var(--border); border-radius: 8px; overflow: hidden; }
+#capacityFill { height: 100%; width: 0; background: var(--ok); transition: width .4s, background .4s; }
+.pricing { color: var(--muted); font-size: 14px; margin: 4px 0 18px; }
+
+.full-alert {
+  background: var(--danger);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  padding: 12px;
+  animation: pulse 1s infinite alternate;
+}
+@keyframes pulse { from { opacity: 1; } to { opacity: .6; } }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.panel h2 { margin: 0 0 14px; font-size: 18px; }
+
+form { display: flex; gap: 8px; flex-wrap: wrap; }
+input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+}
+button {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.1); }
+button.ghost { background: transparent; font-size: 20px; padding: 4px 8px; }
+button.release { background: var(--danger); width: 100%; margin-top: 10px; }
+.hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+
+.cars {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+.car {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  background: var(--bg);
+}
+.car.new { animation: drive-in .6s ease-out; }
+@keyframes drive-in {
+  from { transform: translateX(-60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Israeli license plate look */
+.plate {
+  display: flex;
+  direction: ltr;
+  border: 2px solid #111;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: "Consolas", monospace;
+  font-weight: 700;
+  font-size: 22px;
+  color: #111;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+.plate .il { background: var(--plate-strip); color: #fff; font-size: 11px; padding: 4px 5px; display: flex; align-items: end; }
+.plate .num { background: var(--plate); padding: 4px 12px; letter-spacing: 1px; }
+
+.car .row { display: flex; justify-content: space-between; font-size: 14px; margin: 3px 0; }
+.car .row span:first-child { color: var(--muted); }
+.car .price { font-weight: 700; font-size: 18px; }
+.car .msg { font-size: 13px; color: var(--muted); margin-top: 8px; min-height: 2.6em; }
+
+.empty { color: var(--muted); text-align: center; padding: 20px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: right; padding: 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--muted); font-weight: 600; }
+
+#toasts {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+.toast {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-right: 5px solid var(--accent);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .15);
+  max-width: 340px;
+  animation: drive-in .4s ease-out;
+}
+.toast.error { border-right-color: var(--danger); }
+.toast.success { border-right-color: var(--ok); }
+
+@media (max-width: 600px) {
+  header { padding: 12px 16px; }
+  .stat .value { font-size: 24px; }
+  #clock { display: none; }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Parking - לוח בקרה</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">🅿️</span>
+      <div>
+        <h1>Smart Parking</h1>
+        <p class="sub">לוח בקרה לשומר החניון</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span id="connection" class="dot" title="חיבור לשרת"></span>
+      <span id="clock"></span>
+      <button id="themeToggle" class="ghost" title="מצב כהה / בהיר">🌙</button>
+    </div>
+  </header>
+
+  <!-- Full capacity alert - shown by JS when the API says is_full -->
+  <div id="fullAlert" class="full-alert" hidden>🚨 החניון מלא! המצלמה תדחה רכבים חדשים עד שיתפנה מקום 🚨</div>
+
+  <main>
+    <section class="stats">
+      <div class="stat"><span class="label">רכבים בחניון</span><span class="value" id="statInside">-</span></div>
+      <div class="stat"><span class="label">מקומות פנויים</span><span class="value" id="statFree">-</span></div>
+      <div class="stat"><span class="label">כניסות מאז ומעולם</span><span class="value" id="statTotal">-</span></div>
+      <div class="stat"><span class="label">הכנסות</span><span class="value" id="statRevenue">-</span></div>
+    </section>
+
+    <div class="capacity">
+      <div class="capacity-bar"><div id="capacityFill"></div></div>
+      <span id="capacityText"></span>
+    </div>
+    <p class="pricing" id="pricing"></p>
+
+    <section class="panel">
+      <h2>📷 סימולציית מצלמה</h2>
+      <form id="enterForm">
+        <input id="plateInput" placeholder="מספר רישוי, למשל 123-45-678" autocomplete="off" required>
+        <button type="submit">הכנס רכב</button>
+      </form>
+      <p class="hint">טיפ: נסו לוחית פלינדרום (למשל 12-343-21) 😉</p>
+    </section>
+
+    <section class="panel">
+      <h2>🚗 רכבים בחניון</h2>
+      <div id="cars" class="cars"></div>
+      <p id="emptyState" class="empty" hidden>החניון ריק. השומר יכול לנמנם 😴</p>
+    </section>
+
+    <section class="panel">
+      <h2>🧾 יציאות אחרונות</h2>
+      <table>
+        <thead><tr><th>לוחית</th><th>זמן חנייה</th><th>מחיר</th><th>שעת יציאה</th></tr></thead>
+        <tbody id="history"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div id="toasts"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
