@@ -12,9 +12,8 @@
 
 | שם | תפקיד עיקרי |
 |----|-------------|
-| _שם 1_ | _לדוגמה: API + Redis_ |
-| _שם 2_ | _לדוגמה: Dashboard + Nginx_ |
-| _שם 3 (אם יש)_ | _לדוגמה: CI/CD + תיעוד_ |
+| Johnathan (jonygen1) | API, Redis, docker-compose, CI/CD |
+| Ron (ronbaron777) | Dashboard, Nginx, Camera simulator, README |
 
 ---
 
